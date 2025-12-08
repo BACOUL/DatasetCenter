@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Core -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark light" />
+  <title>DatasetCenter — Verified datasets for AI</title>
+  <meta name="description" content="DatasetCenter provides curated, structured, and cryptographically verified datasets for AI systems — starting with the EU AI Act. Powered by TimeProofs." />
+  <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#020617" />
+
+  <!-- Simple styles (all inline for simplicity) -->
+  <style>
+    :root {
+      --bg: #020617;
+      --panel: #020617;
+      --panel-soft: #020617;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #22d3ee;
+      --accent-soft: rgba(34, 211, 238, 0.12);
+      --border: #1f2937;
+      --danger: #f97316;
+      --ok: #22c55e;
+      --radius: 14px;
+      --shadow: 0 18px 60px rgba(15, 23, 42, 0.9);
+      --max-width: 960px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 55%, #000 100%);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .page {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 8px 0 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand__logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 30% 0%, #22d3ee 0, #0f172a 39%, #020617 100%);
+      box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.35);
+      font-size: 18px;
+    }
+
+    .brand__text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand__name {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .brand__tagline {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 14px;
+    }
+
+    .nav-link {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .nav-link--primary {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .nav-link--primary:hover {
+      text-decoration: none;
+      border-color: var(--accent);
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .hero {
+      padding: 24px 20px 24px;
+      border-radius: 24px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background:
+        radial-gradient(circle at top left, rgba(34, 211, 238, 0.2), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(251, 113, 133, 0.15), transparent 55%),
+        linear-gradient(135deg, #020617, #020617);
+      box-shadow: var(--shadow);
+    }
+
+    .hero__badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+      align-items: center;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--muted);
+    }
+
+    .chip__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+    }
+
+    .chip--powered {
+      border-color: rgba(34, 211, 238, 0.85);
+      background: rgba(15, 23, 42, 0.95);
+      color: #bae6fd;
+    }
+
+    .hero__title {
+      font-size: clamp(1.7rem, 4vw, 2.1rem);
+      font-weight: 800;
+      margin: 4px 0 10px;
+      letter-spacing: 0.02em;
+    }
+
+    .hero__lead {
+      max-width: 640px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--muted);
+      margin: 0 0 16px;
+    }
+
+    .hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .btn--primary {
+      background: radial-gradient(circle at top, #22d3ee, #0284c7);
+      border-color: rgba(56, 189, 248, 0.9);
+      color: #0b1120;
+      box-shadow: 0 14px 40px rgba(8, 47, 73, 0.65);
+    }
+
+    .btn--primary:hover {
+      box-shadow: 0 18px 50px rgba(8, 47, 73, 0.8);
+      text-decoration: none;
+    }
+
+    .btn--ghost {
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .btn span.icon {
+      font-size: 16px;
+    }
+
+    .section {
+      margin-top: 4px;
+      padding: 18px 16px 20px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top left, #020617, #020617 60%, #020617 100%);
+    }
+
+    .section__title {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0 0 8px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section__subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0 0 16px;
+    }
+
+    .datasets-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    @media (min-width: 768px) {
+      .datasets-grid {
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      }
+    }
+
+    .card {
+      border-radius: 14px;
+      padding: 14px 14px 16px;
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), #020617 60%);
+    }
+
+    .card__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .card__title {
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card__title span.emoji {
+      font-size: 18px;
+    }
+
+    .pill {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .pill--ok {
+      border-color: rgba(34, 197, 94, 0.7);
+      color: #bbf7d0;
+    }
+
+    .card__body {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .meta-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .meta-list li {
+      margin-bottom: 3px;
+    }
+
+    .meta-label {
+      color: #9ca3af;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 6px 0 2px;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: #9ca3af;
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    .tag--accent {
+      border-color: rgba(34, 211, 238, 0.8);
+      color: #bae6fd;
+    }
+
+    .card__footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .link-inline {
+      font-size: 12px;
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    @media (min-width: 768px) {
+      .pricing-grid {
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      }
+    }
+
+    .price {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .price span {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-left: 2px;
+    }
+
+    .list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .list li {
+      margin-bottom: 4px;
+    }
+
+    footer {
+      padding-top: 24px;
+      margin-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav {
+        align-self: stretch;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+      .hero {
+        padding: 20px 16px 20px;
+      }
+      .section {
+        padding: 14px 12px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand">
+        <div class="brand__logo">📚</div>
+        <div class="brand__text">
+          <div class="brand__name">DatasetCenter</div>
+          <div class="brand__tagline">Curated & verified datasets for AI</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#datasets" class="nav-link">Datasets</a>
+        <a href="#pricing" class="nav-link">Pricing</a>
+        <a href="#integrity" class="nav-link">Integrity</a>
+        <a href="#contact" class="nav-link--primary">Get early access</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- HERO -->
+      <section class="hero">
+        <div class="hero__badge-row">
+          <div class="chip">
+            <span class="chip__dot"></span>
+            Live · Early access
+          </div>
+          <div class="chip chip--powered">
+            Powered by <strong>&nbsp;TimeProofs</strong>
+          </div>
+        </div>
+        <h1 class="hero__title">Verified, structured datasets for compliance-grade AI.</h1>
+        <p class="hero__lead">
+          DatasetCenter provides curated, structured, and cryptographically verified datasets for AI systems.
+          Start with the EU AI Act in a machine-readable format — ready for LLMs, agents, and compliance tools.
+        </p>
+        <div class="hero__actions">
+          <a href="#datasets" class="btn btn--primary">
+            <span class="icon">⬇️</span>
+            <span>View available dataset</span>
+          </a>
+          <a href="#pricing" class="btn btn--ghost">
+            <span class="icon">💶</span>
+            <span>See pricing</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- DATASETS -->
+      <section id="datasets" class="section" aria-labelledby="datasets-title">
+        <h2 id="datasets-title" class="section__title">Available dataset</h2>
+        <p class="section__subtitle">
+          First resource in the catalog. Additional regulatory and security datasets will be added iteratively.
+        </p>
+
+        <div class="datasets-grid">
+          <!-- AI Act dataset card -->
+          <article class="card">
+            <div class="card__header">
+              <div class="card__title">
+                <span class="emoji">⚖️</span>
+                <span>EU AI Act — Structured Articles v1</span>
+              </div>
+              <div class="pill pill--ok">v1 · Ready</div>
+            </div>
+            <div class="card__body">
+              Machine-readable version of the EU AI Act: articles split, structured, summarized and tagged for AI systems.
+              Ideal for legal assistants, compliance copilots and risk-scoring tools.
+            </div>
+            <ul class="meta-list">
+              <li><span class="meta-label">Format:</span> JSON + CSV</li>
+              <li><span class="meta-label">Language:</span> English (official text)</li>
+              <li><span class="meta-label">Granularity:</span> by article (with chapter/section)</li>
+            </ul>
+            <div class="tag-row">
+              <span class="tag tag--accent">ai_act</span>
+              <span class="tag">compliance</span>
+              <span class="tag">eu_regulation</span>
+              <span class="tag">llm_ready</span>
+              <span class="tag">agents</span>
+            </div>
+            <div class="card__footer">
+              <a href="#" class="btn btn--ghost">
+                <span class="icon">📄</span>
+                <span>Download sample (soon)</span>
+              </a>
+              <a href="#contact" class="link-inline">Request full access</a>
+            </div>
+          </article>
+
+          <!-- How it works -->
+          <article class="card">
+            <div class="card__header">
+              <div class="card__title">
+                <span class="emoji">🧩</span>
+                <span>Designed for LLMs & agents</span>
+              </div>
+            </div>
+            <div class="card__body">
+              Each dataset is designed to be plugged directly into AI systems:
+            </div>
+            <ul class="list">
+              <li>Consistent JSON schema with stable IDs</li>
+              <li>Short, neutral summaries for fast context</li>
+              <li>Keywords for routing and retrieval</li>
+              <li>Version field for deterministic behavior</li>
+              <li>Cryptographic proof for audit trails</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- PRICING -->
+      <section id="pricing" class="section" aria-labelledby="pricing-title">
+        <h2 id="pricing-title" class="section__title">Pricing (early access)</h2>
+        <p class="section__subtitle">
+          Simple and transparent. Early access pricing will be reserved for the first partners working with the AI Act dataset.
+        </p>
+
+        <div class="pricing-grid">
+          <article class="card">
+            <div class="card__header">
+              <div class="card__title">
+                <span class="emoji">🚀</span>
+                <span>Early Access — AI Act dataset</span>
+              </div>
+              <div class="pill">Founding partners</div>
+            </div>
+            <p class="card__body">
+              Access to the <strong>EU AI Act dataset v1</strong>, updates, and cryptographic proofs of each version.
+            </p>
+            <p class="price">
+              € 49<span>/month · early access</span>
+            </p>
+            <ul class="list">
+              <li>Full JSON + CSV download</li>
+              <li>Structured by article, with summaries and keywords</li>
+              <li>Versioned updates (v1.x)</li>
+              <li>Proof of integrity (TimeProofs)</li>
+            </ul>
+            <div class="card__footer">
+              <!-- Replace # with your payment/checkout URL later -->
+              <a href="#contact" class="btn btn--primary">
+                <span class="icon">💳</span>
+                <span>Request early access</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card__header">
+              <div class="card__title">
+                <span class="emoji">🏛️</span>
+                <span>For teams & enterprises</span>
+              </div>
+            </div>
+            <p class="card__body">
+              For compliance, legal and AI teams needing stronger guarantees and integration support.
+            </p>
+            <ul class="list">
+              <li>Team or enterprise license</li>
+              <li>Integration guidance (LLMs, agents, RAG)</li>
+              <li>Custom proof bundles (per release)</li>
+              <li>Priority on future regulatory datasets</li>
+            </ul>
+            <div class="card__footer">
+              <a href="#contact" class="link-inline">Contact for enterprise pricing</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- INTEGRITY / TIMEPROOFS -->
+      <section id="integrity" class="section" aria-labelledby="integrity-title">
+        <h2 id="integrity-title" class="section__title">Integrity & proofs</h2>
+        <p class="section__subtitle">
+          Every dataset version is sealed with TimeProofs to provide deterministic verification of integrity and release date.
+        </p>
+
+        <article class="card">
+          <div class="card__header">
+            <div class="card__title">
+              <span class="emoji">🔐</span>
+              <span>Powered by TimeProofs</span>
+            </div>
+            <div class="pill pill--ok">Proof of dataset</div>
+          </div>
+          <p class="card__body">
+            For each dataset release, DatasetCenter generates a cryptographic proof using TimeProofs:
+            the hash of the dataset files is timestamped and signed so any consumer can verify that the content
+            has not changed since publication.
+          </p>
+          <ul class="list">
+            <li>Hash of the dataset files (JSON/CSV)</li>
+            <li>Signed and timestamped proof (.tproof.json)</li>
+            <li>Public verification endpoint</li>
+            <li>Ready for audit trails and AI Act documentation</li>
+          </ul>
+          <div class="card__footer">
+            <a href="https://timeproofs.io" target="_blank" rel="noreferrer" class="link-inline">
+              Learn more about TimeProofs
+            </a>
+          </div>
+        </article>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="contact" class="section" aria-labelledby="contact-title">
+        <h2 id="contact-title" class="section__title">Contact</h2>
+        <p class="section__subtitle">
+          Interested in the AI Act dataset or in future regulatory datasets? Get in touch for early access.
+        </p>
+
+        <article class="card">
+          <p class="card__body">
+            For now, access is shared directly with early partners.  
+            You can:
+          </p>
+          <ul class="list">
+            <li>Request access to the full AI Act dataset v1</li>
+            <li>Discuss your AI / compliance / agent use case</li>
+            <li>Be informed when new datasets (GDPR, Data Act, security) are added</li>
+          </ul>
+          <div class="card__footer">
+            <!-- Replace this email with yours -->
+            <a href="mailto:contact@datasetcenter.io?subject=DatasetCenter%20AI%20Act%20dataset" class="btn btn--ghost">
+              <span class="icon">✉️</span>
+              <span>contact@datasetcenter.io</span>
+            </a>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <div>© <span id="year"></span> DatasetCenter — Curated datasets for AI. Powered by TimeProofs.</div>
+      <div class="footer-links">
+        <a href="#datasets">Datasets</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#integrity">Integrity</a>
+        <a href="https://timeproofs.io" target="_blank" rel="noreferrer">TimeProofs</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Tiny inline script just to set the year -->
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+              </html>
