@@ -3,20 +3,29 @@
   "title": "Subject matter",
   "chapter": "Chapter I",
   "section": null,
+
   "full_text": "1. The purpose of this Regulation is to improve the functioning of the internal market and promote the uptake of human-centric and trustworthy artificial intelligence (AI), while ensuring a high level of protection of health, safety, fundamental rights enshrined in the Charter, including democracy, the rule of law and environmental protection, against the harmful effects of AI systems in the Union and supporting innovation.\n\n2. This Regulation lays down:\n\n(a) harmonised rules for the placing on the market, the putting into service, and the use of AI systems in the Union;\n\n(b) prohibitions of certain AI practices;\n\n(c) specific requirements for high-risk AI systems and obligations for operators of such systems;\n\n(d) harmonised transparency rules for certain AI systems;\n\n(e) harmonised rules for the placing on the market of general-purpose AI models;\n\n(f) rules on market monitoring, market surveillance, governance and enforcement;\n\n(g) measures to support innovation, with a particular focus on SMEs, including start-ups.",
-  "summary": "Article 1 defines the purpose and scope of the EU Artificial Intelligence Act. Its goal is to ensure a high level of protection for health, safety, fundamental rights, and democratic values while supporting the uptake of human-centric and trustworthy AI in the internal market. The Article introduces harmonised rules for marketing and using AI systems, including specific requirements for high-risk AI and obligations for operators. It also sets prohibitions for certain AI practices, transparency rules, governance mechanisms, and measures to support innovation, especially for SMEs and start-ups.",
+
+  "full_text_hash": "46a8cf0a71efd5dbfdf44ff4e6f0a4995d0d1e3684e9bcf76bdaea5f91431c8e",
+
+  "summary": "Article 1 defines the purpose and scope of the European Union Artificial Intelligence Act. It seeks to ensure a high level of protection of health, safety, and fundamental rights while supporting the uptake of trustworthy AI within the internal market. It establishes harmonised rules for AI systems, including prohibitions, transparency obligations, requirements for high-risk AI, and governance provisions, alongside measures intended to support innovation, especially for small and medium-sized enterprises.",
+
   "keywords": [
     "subject_matter",
     "internal_market",
     "trustworthy_ai",
     "fundamental_rights",
+    "harmonised_rules",
     "high_risk_ai",
-    "transparency_rules",
+    "transparency",
     "governance",
     "innovation_support",
     "smes"
   ],
+
   "source_url": "https://www.artificial-intelligence-act.com/Artificial_Intelligence_Act_Article_1.html",
+
   "version": "ai_act_dataset_v1.0.0",
+
   "last_updated": "2025-12-08"
 }
