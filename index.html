@@ -554,7 +554,7 @@
             </div>
           </div>
           <div class="hero__note">
-            First dataset: <strong>EU AI Act (Articles 1–113)</strong>
+            First dataset: <strong>EU AI Act (target: Articles 1–113, starting with first 30)</strong>
           </div>
         </div>
 
@@ -568,7 +568,7 @@
         </p>
 
         <div class="hero__actions">
-          <a href="#datasets" class="btn btn--primary">
+          <a href="/ai-act/" class="btn btn--primary">
             <span class="icon">📚</span>
             <span>Explore the AI Act dataset</span>
           </a>
@@ -586,7 +586,7 @@
             <span>Articles split, summarised and tagged</span>
           </div>
           <div class="hero__meta-item">
-            <span>JSON / CSV · IA-ready · Versioned</span>
+            <span>JSON / CSV · AI-ready · Versioned</span>
           </div>
         </div>
       </section>
@@ -596,7 +596,8 @@
         <h2 id="datasets-title" class="section__title">Datasets</h2>
         <p class="section__subtitle">
           The first dataset focuses on the EU AI Act, with the goal of becoming a reference source
-          for AI systems, RAG pipelines and compliance assistants.
+          for AI systems, RAG pipelines and compliance assistants. We start with the first 30 articles,
+          then progressively expand to all 113.
         </p>
 
         <div class="grid-2">
@@ -609,7 +610,7 @@
               <div class="pill pill--ok">v1 · Core schema</div>
             </div>
             <p class="card__body">
-              Articles 1–113 of the EU AI Act, converted into machine-readable records:
+              Articles of the EU AI Act, converted into machine-readable records:
               each article is a JSON entry with full text, summary, keywords and metadata.
               Designed for LLMs, agents and regulatory tools that need deterministic inputs.
             </p>
@@ -853,4 +854,4 @@
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 </body>
-  </html>
+          </html>
