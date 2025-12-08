@@ -1,0 +1,34 @@
+[
+  {
+    "id": "AI_ACT_ART_01",
+    "title": "Article 1 — Subject matter",
+    "chapter": "Chapter I",
+    "section": null,
+    "full_text": "[PLACEHOLDER] Full official text of Article 1 goes here.",
+    "summary": "Defines the subject matter and overall purpose of the EU AI Act as a horizontal regulatory framework for artificial intelligence systems in the Union.",
+    "keywords": [
+      "scope",
+      "subject_matter",
+      "ai_act_framework"
+    ],
+    "source_url": "https://example.eu/ai-act/article-1",
+    "version": "ai_act_dataset_v1.0.0",
+    "last_updated": "2025-12-08"
+  },
+  {
+    "id": "AI_ACT_ART_05",
+    "title": "Article 5 — Prohibited AI practices",
+    "chapter": "Chapter II",
+    "section": null,
+    "full_text": "[PLACEHOLDER] Full official text of Article 5 goes here.",
+    "summary": "Lists categories of AI practices that are prohibited in the EU, for example manipulative systems or those exploiting vulnerabilities of specific groups.",
+    "keywords": [
+      "prohibited_ai",
+      "fundamental_rights",
+      "risk_management"
+    ],
+    "source_url": "https://example.eu/ai-act/article-5",
+    "version": "ai_act_dataset_v1.0.0",
+    "last_updated": "2025-12-08"
+  }
+]
