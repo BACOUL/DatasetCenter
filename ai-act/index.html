@@ -23,17 +23,13 @@
       --accent-soft: #eef2ff;
       --accent-strong: #4f46e5;
       --border: #e5e7eb;
-      --danger: #f97316;
       --ok: #22c55e;
       --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
       --radius-lg: 18px;
-      --radius-md: 12px;
       --max-width: 1040px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html, body {
       margin: 0;
@@ -44,20 +40,6 @@
       color: var(--text);
     }
 
-    body {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    a {
-      color: var(--accent-strong);
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-
     .page {
       width: 100%;
       max-width: var(--max-width);
@@ -65,458 +47,91 @@
       padding: 20px 16px 32px;
     }
 
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 6px 0 20px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .brand__logo {
-      width: 34px;
-      height: 34px;
-      border-radius: 12px;
-      background:
-        radial-gradient(circle at 20% 0%, #e0e7ff 0, #6366f1 36%, #4f46e5 70%, #111827 100%);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      color: #f9fafb;
-      font-weight: 800;
-      font-size: 18px;
-      box-shadow: 0 12px 30px rgba(79, 70, 229, 0.45);
-    }
-
-    .brand__text {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .brand__name {
-      font-size: 18px;
-      font-weight: 750;
-      letter-spacing: 0.03em;
-    }
-
-    .brand__tagline {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      font-size: 14px;
-    }
-
-    .nav-link {
-      color: var(--muted);
-      font-weight: 500;
-      text-decoration: none;
-    }
-
-    .nav-link:hover {
-      color: var(--accent-strong);
-    }
-
-    .nav-link--primary {
-      padding: 7px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: #111827;
-      color: #f9fafb;
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    .nav-link--primary:hover {
-      text-decoration: none;
-      background: #020617;
-    }
-
-    main {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .hero {
-      border-radius: 22px;
-      padding: 26px 22px 24px;
-      background:
-        radial-gradient(circle at top left, #eef2ff 0, #e0f2fe 40%, #ffffff 100%);
-      border: 1px solid rgba(148, 163, 184, 0.45);
-      box-shadow: var(--shadow-soft);
-    }
-
-    .hero__top-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
+    h1 {
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
       margin-bottom: 10px;
-      flex-wrap: wrap;
+      font-weight: 800;
     }
 
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 3px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+    p {
       color: var(--muted);
-      background: rgba(249, 250, 251, 0.95);
+      font-size: 15px;
+      line-height: 1.65;
+      margin-bottom: 24px;
     }
 
-    .chip__dot {
-      width: 7px;
-      height: 7px;
+    .list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .list li {
+      margin-bottom: 12px;
+    }
+
+    a {
+      color: var(--accent-strong);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      font-size: 11px;
       border-radius: 999px;
-      background: #22c55e;
-      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
-    }
-
-    .chip--accent {
-      border-color: rgba(99, 102, 241, 0.9);
       background: var(--accent-soft);
       color: #312e81;
-    }
-
-    .hero__note {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .hero__title {
-      font-size: clamp(1.8rem, 3.5vw, 2.3rem);
-      margin: 4px 0 8px;
-      font-weight: 800;
-      letter-spacing: 0.02em;
-    }
-
-    .hero__title span.highlight {
-      color: var(--accent-strong);
-    }
-
-    .hero__lead {
-      font-size: 15px;
-      line-height: 1.7;
-      max-width: 720px;
-      color: var(--muted);
-      margin: 0 0 14px;
-    }
-
-    .hero__actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 4px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 9px 16px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      background: transparent;
-      color: var(--text);
-      text-decoration: none;
-    }
-
-    .btn span.icon {
-      font-size: 16px;
-    }
-
-    .btn--ghost {
-      background: rgba(249, 250, 251, 0.9);
-    }
-
-    .section {
-      border-radius: var(--radius-lg);
-      padding: 18px 18px 18px;
-      background: #ffffff;
-      border: 1px solid var(--border);
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
-    }
-
-    .section__title {
-      font-size: 16px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: #4b5563;
-      margin: 0 0 6px;
-    }
-
-    .section__subtitle {
-      font-size: 14px;
-      color: var(--muted);
-      margin: 0 0 14px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-
-    thead {
-      background: #f3f4f6;
-    }
-
-    th, td {
-      text-align: left;
-      padding: 8px 10px;
-      border-bottom: 1px solid #e5e7eb;
-      vertical-align: top;
-    }
-
-    th {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #6b7280;
-    }
-
-    tbody tr:hover {
-      background: #f9fafb;
-    }
-
-    code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 12px;
-      background: #f3f4f6;
-      padding: 2px 4px;
-      border-radius: 4px;
+      border: 1px solid rgba(99, 102, 241, 0.6);
+      margin-left: 8px;
     }
 
     footer {
-      margin-top: 20px;
+      margin-top: 40px;
       padding-top: 18px;
       border-top: 1px solid var(--border);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
       font-size: 12px;
       color: var(--muted);
     }
-
-    .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .footer-links a {
-      color: var(--muted);
-      text-decoration: none;
-    }
-
-    .footer-links a:hover {
-      text-decoration: underline;
-      color: var(--accent-strong);
-    }
-
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      nav {
-        align-self: stretch;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-      }
-      .hero {
-        padding: 20px 16px 18px;
-      }
-      .section {
-        padding: 16px 14px 16px;
-      }
-      table {
-        font-size: 12px;
-      }
-    }
   </style>
 </head>
+
 <body>
-  <div class="page">
-    <header>
-      <div class="brand">
-        <div class="brand__logo">DC</div>
-        <div class="brand__text">
-          <div class="brand__name">DatasetCenter</div>
-          <div class="brand__tagline">Legal datasets for AI — structured, versioned, verifiable</div>
-        </div>
-      </div>
-      <nav>
-        <a href="/#datasets" class="nav-link">Datasets</a>
-        <a href="/#use-cases" class="nav-link">Use cases</a>
-        <a href="/#pricing" class="nav-link">Pricing</a>
-        <a href="/#trust" class="nav-link">Trust</a>
-        <a href="/#contact" class="nav-link--primary">Early access</a>
-      </nav>
-    </header>
+<div class="page">
 
-    <main>
-      <!-- HERO -->
-      <section class="hero">
-        <div class="hero__top-row">
-          <div class="chips">
-            <div class="chip">
-              <span class="chip__dot"></span>
-              EU AI Act dataset v1 · Work in progress
-            </div>
-            <div class="chip chip--accent">
-              First 30 articles · Target: 1–113
-            </div>
-          </div>
-          <div class="hero__note">
-            Storage path: <code>datasets/ai-act/v1/articles/XX.json</code>
-          </div>
-        </div>
+  <h1>EU AI Act — Articles (v1)</h1>
 
-        <h1 class="hero__title">
-          EU AI Act dataset <span class="highlight">v1</span>
-        </h1>
-        <p class="hero__lead">
-          Machine-readable EU AI Act: one JSON file per article, with full text, summary, keywords,
-          metadata and version. This page lists the articles included in the dataset and their
-          corresponding file paths.
-        </p>
+  <p>
+    First version of the EU Artificial Intelligence Act structured into article-level JSON files.
+    Each record includes full text, summary, keywords and metadata.
+  </p>
 
-        <div class="hero__actions">
-          <a href="/" class="btn btn--ghost">
-            <span class="icon">←</span>
-            <span>Back to home</span>
-          </a>
-        </div>
-      </section>
+  <ul class="list">
+    <li><a href="/datasets/ai-act/v1/articles/01.json">Article&nbsp;01 – Subject matter</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/02.json">Article&nbsp;02 – Scope</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/03.json">Article&nbsp;03 – Definitions</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/04.json">Article&nbsp;04 – AI literacy</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/05.json">Article&nbsp;05 – Prohibited AI Practices</a></li>
+  </ul>
 
-      <!-- TABLE ARTICLES -->
-      <section class="section" aria-labelledby="articles-title">
-        <h2 id="articles-title" class="section__title">Articles included</h2>
-        <p class="section__subtitle">
-          Preview of the dataset content. The first 30 articles are being structured under
-          <code>datasets/ai-act/v1/articles/</code>. Each file follows the same schema
-          (<code>id</code>, <code>title</code>, <code>chapter</code>, <code>section</code>,
-          <code>full_text</code>, <code>summary</code>, <code>keywords</code>, <code>source_url</code>,
-          <code>version</code>, <code>last_updated</code>, and later <code>full_text_hash</code>).
-        </p>
+  <p>
+    More articles in progress… This page will update automatically as more JSON files are added.
+    <span class="badge">v1</span>
+  </p>
 
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 60px;">#</th>
-              <th>Article</th>
-              <th>Title</th>
-              <th>Chapter</th>
-              <th>JSON path</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Exemples des premiers articles (tu peux étendre jusqu'à 30 au fur et à mesure) -->
-            <tr>
-              <td>01</td>
-              <td><code>AI_ACT_ART_01</code></td>
-              <td>Subject matter</td>
-              <td>Chapter I — General Provisions</td>
-              <td><code>datasets/ai-act/v1/articles/01.json</code></td>
-            </tr>
-            <tr>
-              <td>02</td>
-              <td><code>AI_ACT_ART_02</code></td>
-              <td>Scope</td>
-              <td>Chapter I — General Provisions</td>
-              <td><code>datasets/ai-act/v1/articles/02.json</code></td>
-            </tr>
-            <tr>
-              <td>03</td>
-              <td><code>AI_ACT_ART_03</code></td>
-              <td>Definitions</td>
-              <td>Chapter I — General Provisions</td>
-              <td><code>datasets/ai-act/v1/articles/03.json</code></td>
-            </tr>
-            <tr>
-              <td>04</td>
-              <td><code>AI_ACT_ART_04</code></td>
-              <td>AI literacy</td>
-              <td>Chapter I — General Provisions</td>
-              <td><code>datasets/ai-act/v1/articles/04.json</code></td>
-            </tr>
-            <tr>
-              <td>05</td>
-              <td><code>AI_ACT_ART_05</code></td>
-              <td>Prohibited AI practices</td>
-              <td>Chapter II — Prohibited AI Practices</td>
-              <td><code>datasets/ai-act/v1/articles/05.json</code></td>
-            </tr>
-            <!-- Placeholder pour la suite -->
-            <tr>
-              <td colspan="5" style="font-size: 12px; color: #6b7280;">
-                Additional articles (06–30) will appear here as soon as their JSON files are added
-                under <code>datasets/ai-act/v1/articles/</code>.
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
+  <footer>
+    © <span id="year"></span> DatasetCenter — Legal datasets for AI. Powered by TimeProofs.
+  </footer>
 
-      <!-- NOTES -->
-      <section class="section" aria-labelledby="notes-title">
-        <h2 id="notes-title" class="section__title">Integration notes</h2>
-        <p class="section__subtitle">
-          How to use this dataset in your AI / RAG / compliance pipelines.
-        </p>
-        <ul style="margin: 0; padding-left: 18px; font-size: 13px; color: #6b7280;">
-          <li>Read JSON directly from <code>datasets/ai-act/v1/articles/XX.json</code> in your pipeline.</li>
-          <li>Use <code>id</code> (for example <code>AI_ACT_ART_01</code>) as a stable reference in prompts and citations.</li>
-          <li>Use <code>keywords</code> for routing or pre-filtering before vector search.</li>
-          <li><code>version</code> and <code>last_updated</code> let you pin a specific dataset version for audits.</li>
-        </ul>
-      </section>
-    </main>
+</div>
 
-    <footer>
-      <div>© <span id="year"></span> DatasetCenter — Legal datasets for AI. Powered by TimeProofs.</div>
-      <div class="footer-links">
-        <a href="/">Home</a>
-        <a href="/#datasets">Datasets</a>
-        <a href="/#pricing">Pricing</a>
-        <a href="/#trust">Trust</a>
-        <a href="https://timeproofs.io" target="_blank" rel="noreferrer">TimeProofs</a>
-      </div>
-    </footer>
-  </div>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
 </body>
-  </html>
+</html>
