@@ -3,9 +3,13 @@
   "title": "AI literacy",
   "chapter": "Chapter I",
   "section": null,
+
   "full_text": "Providers and deployers of AI systems shall take measures to ensure, to their best extent, a sufficient level of AI literacy of their staff and other persons dealing with the operation and use of AI systems on their behalf, taking into account their technical knowledge, experience, education and training and the context the AI systems are to be used in, and considering the persons or groups of persons on whom the AI systems are to be used.",
+
   "full_text_sha256": "a000da620ed8e126907f4d9336d9e884bc2cdd781b3d0802b7bcbc410f69027a",
+
   "summary": "Article 4 establishes an obligation for providers and deployers of AI systems to ensure that individuals operating or using AI on their behalf possess an adequate level of AI literacy. The requirement is proportional to the technical knowledge, experience and context of use. The goal is to ensure informed operation and reduce risks by improving skills and awareness related to the deployment and impact of AI systems.",
+
   "keywords": [
     "ai_literacy",
     "providers",
@@ -14,9 +18,12 @@
     "operational_skills",
     "awareness"
   ],
+
   "source_url": "https://artificialintelligenceact.eu/article/4/",
+
   "version": "ai_act_dataset_v1.0.0",
   "last_updated": "2025-12-08",
+
   "dataset_path": "datasets/ai-act/v1/articles/AI_ACT_ART_04.json",
-  "github_path": "https://github.com/BACOUL/datasetcenter/blob/main/datasets/ai-act/v1/articles/AI_ACT_ART_04.json"
+  "github_path": "datasets/ai-act/v1/articles/AI_ACT_ART_04.json"
 }
