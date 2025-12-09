@@ -38,14 +38,40 @@ async function main() {
   files.sort();
 
   const articles = [];
+  let skipped = 0;
 
   for (const file of files) {
     const filePath = path.join(ARTICLES_DIR, file);
-    const raw = await fs.readFile(filePath, "utf8");
-    const data = JSON.parse(raw);
+
+    let raw;
+    try {
+      raw = await fs.readFile(filePath, "utf8");
+    } catch (err) {
+      console.error(`❌ ${file}: unable to read file (${err.message}), skipping`);
+      skipped++;
+      continue;
+    }
+
+    let data;
+    try {
+      data = JSON.parse(raw);
+    } catch (err) {
+      console.error(
+        `❌ ${file}: invalid JSON (${err.message}), skipping this article`
+      );
+      skipped++;
+      continue;
+    }
+
+    if (!data || typeof data !== "object") {
+      console.warn(`⚠️  ${file}: JSON is not an object, skipping`);
+      skipped++;
+      continue;
+    }
 
     if (!data.full_text || typeof data.full_text !== "string") {
       console.warn(`⚠️  ${file}: missing or invalid full_text, skipping`);
+      skipped++;
       continue;
     }
 
@@ -57,6 +83,7 @@ async function main() {
       );
     }
 
+    // Champ canonique dans les articles
     data.full_text_sha256 = hash;
 
     const number = inferArticleNumber(data.id, file);
@@ -78,8 +105,18 @@ async function main() {
 
     articles.push(record);
 
-    // réécrire le fichier article avec le hash mis à jour
-    await fs.writeFile(filePath, JSON.stringify(data, null, 2) + "\n", "utf8");
+    // Réécrire le fichier article avec le hash mis à jour
+    try {
+      await fs.writeFile(
+        filePath,
+        JSON.stringify(data, null, 2) + "\n",
+        "utf8"
+      );
+    } catch (err) {
+      console.error(
+        `❌ ${file}: failed to write updated JSON (${err.message})`
+      );
+    }
   }
 
   const index = {
@@ -96,6 +133,9 @@ async function main() {
   console.log(
     `✅ Done. Updated ${articles.length} articles and wrote ${INDEX_PATH}`
   );
+  if (skipped > 0) {
+    console.log(`⚠️ Skipped ${skipped} article file(s) due to errors`);
+  }
 }
 
 main().catch((err) => {
