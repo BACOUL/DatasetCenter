@@ -1,0 +1,27 @@
+{
+  "id": "AI_ACT_ART_12",
+  "title": "Record-Keeping",
+  "chapter": "Chapter III — High-Risk AI System",
+  "section": "Section 2 — Requirements for High-Risk AI Systems",
+  "language": "en",
+
+  "full_text": "1. High-risk AI systems shall technically allow for the automatic recording of events (logs) over the lifetime of the system.\n\n2. In order to ensure a level of traceability of the functioning of a high-risk AI system that is appropriate to the intended purpose of the system, logging capabilities shall enable the recording of events relevant for:\n\n(a) identifying situations that may result in the high-risk AI system presenting a risk within the meaning of Article 79(1) or in a substantial modification;\n\n(b) facilitating the post-market monitoring referred to in Article 72; and\n\n(c) monitoring the operation of high-risk AI systems referred to in Article 26(5).\n\n3. For high-risk AI systems referred to in point 1 (a), of Annex III, the logging capabilities shall provide, at a minimum:\n\n(a) recording of the period of each use of the system (start date and time and end date and time of each use);\n\n(b) the reference database against which input data has been checked by the system;\n\n(c) the input data for which the search has led to a match;\n\n(d) the identification of the natural persons involved in the verification of the results, as referred to in Article 14(5).",
+
+  "full_text_sha256": "TO_BE_FILLED_BY_update_ai_act.mjs",
+
+  "summary": "Article 12 requires that high-risk AI systems technically support automatic logging over their entire lifetime. Logging must provide sufficient traceability to identify situations where the system may create risks, support post-market monitoring, and monitor ongoing operation, particularly in relation to deployers’ obligations. For certain Annex III systems, logs must at minimum record usage periods, the reference database used, matched input data, and the identity of human verifiers involved in result checking.",
+  "keywords": [
+    "record_keeping",
+    "logging_capabilities",
+    "traceability",
+    "high_risk_ai_systems",
+    "post_market_monitoring",
+    "annex_iii_logging",
+    "biometric_identification_logs"
+  ],
+
+  "source_url": "https://artificialintelligenceact.eu/article/12/",
+  "github_path": "datasets/ai-act/v1/articles/AI_ACT_ART_12.json",
+  "version": "ai_act_dataset_v1.0.0",
+  "last_updated": "2025-12-08"
+}
