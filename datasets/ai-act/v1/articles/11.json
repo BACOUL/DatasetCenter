@@ -16,9 +16,9 @@
     "delegated_acts_annex_iv_update"
   ],
   "source_url": "https://artificialintelligenceact.eu/article/11/",
-  "github_path": "datasets/ai-act/v1/articles/AI_ACT_ART_11.json",
+  "dataset_path": "datasets/ai-act/v1/articles/11.json",
+  "github_path": "https://github.com/BACOUL/DatasetCenter/blob/main/datasets/ai-act/v1/articles/11.json",
   "version": "ai_act_dataset_v1.0.0",
   "last_updated": "2025-12-08",
-  "full_text_hash": "8979f987d92294996757feff987b5563016575e7695dfe20584001452a115914"
+  "full_text_sha256": "8979f987d92294996757feff987b5563016575e7695dfe20584001452a115914"
 }
-```0
