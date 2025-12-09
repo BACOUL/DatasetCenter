@@ -18,6 +18,7 @@
   ],
   "source_url": "https://artificialintelligenceact.eu/article/10/",
   "github_path": "datasets/ai-act/v1/articles/AI_ACT_ART_10.json",
+  "dataset_path": "datasets/ai-act/v1/articles/AI_ACT_ART_10.json",
   "version": "ai_act_dataset_v1.0.0",
   "last_updated": "2025-12-08",
   "full_text_hash": "cb9c36fa157ba26078eb47cdd4bdd27ee8e7ab5fc57fda9c74f3d2852c3470ee"
