@@ -2,11 +2,8 @@ name: Update AI Act
 
 on:
   schedule:
-    - cron: "0 2 * * *"      # chaque jour à 02:00 UTC
-  workflow_dispatch: {}      # déclenchement manuel
-
-permissions:
-  contents: write            # nécessaire pour push automatique
+    - cron: "0 2 * * *"   # chaque jour à 02:00 UTC
+  workflow_dispatch: {}    # déclenchement manuel
 
 jobs:
   update:
@@ -21,7 +18,6 @@ jobs:
         with:
           node-version: 20
 
-      # On n'a pas besoin de npm install
       - name: Run updater
         run: node scripts/update_ai_act.mjs
 
@@ -31,4 +27,4 @@ jobs:
           git config user.email "github-actions@users.noreply.github.com"
           git add .
           git commit -m "auto: update AI Act articles" || echo "Nothing to commit"
-          git push origin HEAD:main || echo "Nothing to push"
+          git push || echo "Nothing to push"
