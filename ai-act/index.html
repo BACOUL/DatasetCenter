@@ -13,13 +13,18 @@
   <style>
     :root {
       --bg: #f3f4f6;
+      --bg-alt: #e5e7eb;
       --card-bg: #ffffff;
+      --card-soft: #f9fafb;
       --text: #0f172a;
       --muted: #6b7280;
       --accent: #6366f1;
       --accent-soft: #eef2ff;
       --accent-strong: #4f46e5;
       --border: #e5e7eb;
+      --ok: #22c55e;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
+      --radius-lg: 18px;
       --max-width: 1040px;
     }
 
@@ -51,17 +56,17 @@
       color: var(--muted);
       font-size: 15px;
       line-height: 1.65;
-      margin-bottom: 18px;
+      margin-bottom: 24px;
     }
 
     .list {
       list-style: none;
       padding: 0;
-      margin: 0 0 8px;
+      margin: 0 0 16px 0;
     }
 
     .list li {
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     a {
@@ -74,8 +79,7 @@
     }
 
     .badge {
-      display: inline-flex;
-      align-items: center;
+      display: inline-block;
       padding: 4px 10px;
       font-size: 11px;
       border-radius: 999px;
@@ -85,9 +89,13 @@
       margin-left: 8px;
     }
 
-    .error {
-      margin-top: 12px;
+    .status {
       font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .status.error {
       color: #b91c1c;
     }
 
@@ -111,17 +119,15 @@
     Each record includes full text, summary, keywords and metadata.
   </p>
 
-  <!-- Liste vide au départ : elle sera remplie par index.json -->
-  <ul class="list" id="articles-list">
-    <li>Loading articles from dataset…</li>
+  <ul id="article-list" class="list">
+    <!-- Contenu généré dynamiquement -->
+    <li>Loading live EU AI Act dataset…</li>
   </ul>
 
-  <p>
-    More articles in progress… This page will update automatically as more JSON files are added.
+  <p class="status" id="dataset-status">
+    Loading <code>/datasets/ai-act/v1/index.json</code>…
     <span class="badge">v1</span>
   </p>
-
-  <p id="error" class="error" aria-live="polite"></p>
 
   <footer>
     © <span id="year"></span> DatasetCenter — Legal datasets for AI. Powered by TimeProofs.
@@ -130,55 +136,60 @@
 </div>
 
 <script>
-  document.getElementById("year").textContent = new Date().getFullYear();
+  document.getElementById('year').textContent = new Date().getFullYear();
 
-  async function loadArticles() {
-    const list = document.getElementById("articles-list");
-    const errorEl = document.getElementById("error");
+  (async () => {
+    const listEl = document.getElementById('article-list');
+    const statusEl = document.getElementById('dataset-status');
 
     try {
-      const res = await fetch("/datasets/ai-act/v1/index.json", { cache: "no-store" });
-      if (!res.ok) throw new Error("HTTP " + res.status);
+      const res = await fetch('/datasets/ai-act/v1/index.json', {
+        cache: 'no-store'
+      });
+      if (!res.ok) {
+        throw new Error('HTTP ' + res.status);
+      }
 
       const data = await res.json();
-      const items = Array.isArray(data.articles) ? data.articles.slice() : [];
+      const articles = Array.isArray(data.articles) ? data.articles : [];
 
-      // Tri par numéro d’article (01, 02, …)
-      items.sort((a, b) => {
-        const na = (a.number || "").toString().padStart(2, "0");
-        const nb = (b.number || "").toString().padStart(2, "0");
-        return na.localeCompare(nb);
+      if (!articles.length) {
+        throw new Error('No articles found in index.json');
+      }
+
+      // Tri par numéro croissant (number = "01", "02", …)
+      articles.sort((a, b) => {
+        const na = parseInt(a.number || '0', 10);
+        const nb = parseInt(b.number || '0', 10);
+        return na - nb;
       });
 
-      list.innerHTML = "";
+      listEl.innerHTML = '';
 
-      if (!items.length) {
-        list.innerHTML = "<li>No articles found yet.</li>";
-        return;
-      }
+      for (const art of articles) {
+        const num = (art.number || '').toString().padStart(2, '0');
+        const title = art.title || 'Untitled article';
+        const path = art.path || `/datasets/ai-act/v1/articles/${num}.json`;
 
-      for (const art of items) {
-        const li = document.createElement("li");
-        const a = document.createElement("a");
-
-        const number = (art.number || "").toString().padStart(2, "0");
-        const title = art.title || "Untitled";
-
-        a.href = "/" + (art.path || "");
-        a.textContent = `Article ${number} – ${title}`;
-
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '/' + path.replace(/^\//, '');
+        a.textContent = `Article ${num} – ${title}`;
         li.appendChild(a);
-        list.appendChild(li);
+        listEl.appendChild(li);
       }
-    } catch (err) {
-      console.error("Failed to load AI Act index:", err);
-      errorEl.textContent =
-        "Unable to load the live EU AI Act dataset (index.json). Showing this page as a static fallback.";
-      // On laisse le message “Loading…” dans la liste pour ne pas afficher une liste fausse.
-    }
-  }
 
-  loadArticles();
+      statusEl.textContent = `Loaded ${articles.length} articles from live index.json.`;
+      statusEl.classList.remove('error');
+    } catch (err) {
+      console.error('Failed to load EU AI Act index:', err);
+      statusEl.textContent =
+        'Unable to load the live EU AI Act dataset (index.json). Please check that datasets/ai-act/v1/index.json exists and is valid JSON.';
+      statusEl.classList.add('error');
+
+      // Si tu veux, tu peux ici remettre une petite liste statique de secours.
+    }
+  })();
 </script>
 
 </body>
