@@ -3,7 +3,7 @@ name: Update AI Act
 on:
   schedule:
     - cron: "0 2 * * *"   # chaque jour à 02:00 UTC
-  workflow_dispatch: {}    # déclenchement manuel
+  workflow_dispatch: {}    # déclenchement manuel depuis l'onglet Actions
 
 jobs:
   update:
