@@ -10,7 +10,7 @@
   <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#f3f4f6" />
 
-  <!-- Styles (copie alignée sur index) -->
+  <!-- Styles -->
   <style>
     :root {
       --bg: #f3f4f6;
@@ -90,6 +90,20 @@
       margin-left: 8px;
     }
 
+    .note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .note--error {
+      color: #b91c1c;
+    }
+
+    .hidden {
+      display: none;
+    }
+
     footer {
       margin-top: 40px;
       padding-top: 18px;
@@ -110,13 +124,27 @@
     Each record includes full text, summary, keywords and metadata.
   </p>
 
+  <!-- Liste statique de secours : 1–10 -->
   <ul class="list" id="article-list">
-    <li>Loading articles from dataset…</li>
+    <li><a href="/datasets/ai-act/v1/articles/01.json">Article&nbsp;01 – Subject matter</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/02.json">Article&nbsp;02 – Scope</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/03.json">Article&nbsp;03 – Definitions</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/04.json">Article&nbsp;04 – AI literacy</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/05.json">Article&nbsp;05 – Prohibited AI Practices</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/06.json">Article&nbsp;06 – Classification Rules for High-Risk AI Systems</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/07.json">Article&nbsp;07 – Amendments to Annex III</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/08.json">Article&nbsp;08 – Compliance with the Requirements</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/09.json">Article&nbsp;09 – Risk Management System</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/10.json">Article&nbsp;10 – Data and Data Governance</a></li>
   </ul>
 
-  <p>
+  <p class="note hidden" id="dataset-note-error">
+    Unable to load the live EU AI Act dataset (index.json). Showing the static list for now.
+  </p>
+
+  <p class="note" id="dataset-note-ok">
     More articles in progress… This page will update automatically as more JSON files are added.
-    <span class="badge" id="dataset-version">v1</span>
+    <span class="badge">v1</span>
   </p>
 
   <footer>
@@ -126,65 +154,69 @@
 </div>
 
 <script>
-  // Year in footer
+  // Année dynamique
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  async function loadArticles() {
+  (async () => {
     const listEl = document.getElementById('article-list');
-    const versionEl = document.getElementById('dataset-version');
+    const noteOk = document.getElementById('dataset-note-ok');
+    const noteError = document.getElementById('dataset-note-error');
+
+    // On garde la liste actuelle comme fallback
+    const fallbackHtml = listEl.innerHTML;
 
     try {
-      const res = await fetch('/datasets/ai-act/v1/index.json', { cache: 'no-store' });
+      const indexUrl = "/datasets/ai-act/v1/index.json";
+      const res = await fetch(indexUrl, { cache: "no-store" });
+
       if (!res.ok) {
-        throw new Error('HTTP ' + res.status);
+        throw new Error("HTTP " + res.status + " " + res.statusText);
       }
 
       const data = await res.json();
 
-      // Met à jour le badge de version si présent dans l’index
-      if (data.version && versionEl) {
-        versionEl.textContent = data.version;
+      if (!data || !Array.isArray(data.articles) || data.articles.length === 0) {
+        console.warn("Index JSON loaded but no articles array or empty:", data);
+        return; // on garde le fallback
       }
 
-      const articles = Array.isArray(data.articles) ? data.articles.slice() : [];
-      // Tri par numéro d’article
-      articles.sort((a, b) => {
-        const na = (a.number || '').toString().padStart(3, '0');
-        const nb = (b.number || '').toString().padStart(3, '0');
+      // On remplace la liste par les données de index.json
+      listEl.innerHTML = "";
+
+      const sorted = [...data.articles].sort((a, b) => {
+        const na = (a.number || "").toString().padStart(3, "0");
+        const nb = (b.number || "").toString().padStart(3, "0");
         return na.localeCompare(nb);
       });
 
-      listEl.innerHTML = '';
+      for (const art of sorted) {
+        const num = art.number ?? "–";
+        const title = art.title || "(Untitled)";
+        const path = art.path || "";
+        const href = path.startsWith("/") ? path : "/" + path;
 
-      if (!articles.length) {
-        listEl.innerHTML = '<li>No articles found in the dataset yet.</li>';
-        return;
-      }
-
-      for (const art of articles) {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-
-        const num = (art.number || '').toString().padStart(2, '0');
-        const title = art.title || 'Untitled';
-
-        // Le chemin vient de index.json: datasets/ai-act/v1/articles/XX.json
-        // On force un "/" devant pour être sûr
-        const href = '/' + (art.path || ('datasets/ai-act/v1/articles/' + num + '.json')).replace(/^\/+/, '');
-
+        const li = document.createElement("li");
+        const a = document.createElement("a");
         a.href = href;
         a.textContent = `Article ${num} – ${title}`;
-
         li.appendChild(a);
         listEl.appendChild(li);
       }
-    } catch (err) {
-      console.error('Failed to load EU AI Act index:', err);
-      listEl.innerHTML = '<li>Unable to load EU AI Act dataset. Please try again later.</li>';
-    }
-  }
 
-  loadArticles();
+      // Note OK
+      noteError.classList.add("hidden");
+      noteOk.classList.remove("note--error");
+    } catch (err) {
+      console.error("Failed to load EU AI Act index.json:", err);
+      // On restaure le fallback si jamais il avait été modifié
+      if (!listEl.innerHTML.trim()) {
+        listEl.innerHTML = fallbackHtml;
+      }
+      noteOk.classList.add("hidden");
+      noteError.classList.remove("hidden");
+      noteError.classList.add("note--error");
+    }
+  })();
 </script>
 
 </body>
