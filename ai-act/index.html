@@ -10,7 +10,7 @@
   <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#f3f4f6" />
 
-  <!-- Styles -->
+  <!-- Styles (copie alignée sur index) -->
   <style>
     :root {
       --bg: #f3f4f6;
@@ -27,6 +27,7 @@
       --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
       --radius-lg: 18px;
       --max-width: 1040px;
+      --error: #dc2626;
     }
 
     * { box-sizing: border-box; }
@@ -90,18 +91,17 @@
       margin-left: 8px;
     }
 
-    .note {
+    .status {
+      margin-top: 16px;
       font-size: 13px;
+    }
+
+    .status-ok {
       color: var(--muted);
-      margin-top: 8px;
     }
 
-    .note--error {
-      color: #b91c1c;
-    }
-
-    .hidden {
-      display: none;
+    .status-error {
+      color: var(--error);
     }
 
     footer {
@@ -124,7 +124,7 @@
     Each record includes full text, summary, keywords and metadata.
   </p>
 
-  <!-- Liste statique de secours : 1–10 -->
+  <!-- Liste statique 1–10 en fallback SEO -->
   <ul class="list" id="article-list">
     <li><a href="/datasets/ai-act/v1/articles/01.json">Article&nbsp;01 – Subject matter</a></li>
     <li><a href="/datasets/ai-act/v1/articles/02.json">Article&nbsp;02 – Scope</a></li>
@@ -138,11 +138,7 @@
     <li><a href="/datasets/ai-act/v1/articles/10.json">Article&nbsp;10 – Data and Data Governance</a></li>
   </ul>
 
-  <p class="note hidden" id="dataset-note-error">
-    Unable to load the live EU AI Act dataset (index.json). Showing the static list for now.
-  </p>
-
-  <p class="note" id="dataset-note-ok">
+  <p id="status" class="status status-ok">
     More articles in progress… This page will update automatically as more JSON files are added.
     <span class="badge">v1</span>
   </p>
@@ -154,69 +150,49 @@
 </div>
 
 <script>
-  // Année dynamique
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  (async () => {
-    const listEl = document.getElementById('article-list');
-    const noteOk = document.getElementById('dataset-note-ok');
-    const noteError = document.getElementById('dataset-note-error');
+  const listEl = document.getElementById('article-list');
+  const statusEl = document.getElementById('status');
 
-    // On garde la liste actuelle comme fallback
-    const fallbackHtml = listEl.innerHTML;
+  // URL du dataset live sur GitHub (branche main)
+  const DATA_URL = "https://raw.githubusercontent.com/BACOUL/DatasetCenter/main/datasets/ai-act/v1/index.json";
 
+  async function loadDataset() {
     try {
-      const indexUrl = "/datasets/ai-act/v1/index.json";
-      const res = await fetch(indexUrl, { cache: "no-store" });
-
+      const res = await fetch(DATA_URL, { cache: "no-store" });
       if (!res.ok) {
-        throw new Error("HTTP " + res.status + " " + res.statusText);
+        throw new Error("HTTP " + res.status);
       }
-
       const data = await res.json();
-
-      if (!data || !Array.isArray(data.articles) || data.articles.length === 0) {
-        console.warn("Index JSON loaded but no articles array or empty:", data);
-        return; // on garde le fallback
+      if (!data.articles || !Array.isArray(data.articles)) {
+        throw new Error("Invalid dataset shape");
       }
 
-      // On remplace la liste par les données de index.json
+      // On remplace la liste statique par la liste complète du dataset
       listEl.innerHTML = "";
-
-      const sorted = [...data.articles].sort((a, b) => {
-        const na = (a.number || "").toString().padStart(3, "0");
-        const nb = (b.number || "").toString().padStart(3, "0");
-        return na.localeCompare(nb);
-      });
-
-      for (const art of sorted) {
-        const num = art.number ?? "–";
-        const title = art.title || "(Untitled)";
-        const path = art.path || "";
-        const href = path.startsWith("/") ? path : "/" + path;
-
+      for (const art of data.articles) {
+        if (!art.number || !art.title || !art.path) continue;
         const li = document.createElement("li");
         const a = document.createElement("a");
-        a.href = href;
-        a.textContent = `Article ${num} – ${title}`;
+        a.href = "/" + art.path.replace(/^\//, "");
+        a.textContent = `Article ${art.number.padStart(2, "0")} – ${art.title}`;
         li.appendChild(a);
         listEl.appendChild(li);
       }
 
-      // Note OK
-      noteError.classList.add("hidden");
-      noteOk.classList.remove("note--error");
+      statusEl.textContent = `Loaded ${data.articles.length} articles from the live EU AI Act dataset (v1).`;
+      statusEl.classList.remove("status-error");
+      statusEl.classList.add("status-ok");
     } catch (err) {
-      console.error("Failed to load EU AI Act index.json:", err);
-      // On restaure le fallback si jamais il avait été modifié
-      if (!listEl.innerHTML.trim()) {
-        listEl.innerHTML = fallbackHtml;
-      }
-      noteOk.classList.add("hidden");
-      noteError.classList.remove("hidden");
-      noteError.classList.add("note--error");
+      console.error("Failed to load dataset:", err);
+      statusEl.textContent = "Unable to load the live EU AI Act dataset (index.json). Showing the static list for now.";
+      statusEl.classList.remove("status-ok");
+      statusEl.classList.add("status-error");
     }
-  })();
+  }
+
+  loadDataset();
 </script>
 
 </body>
