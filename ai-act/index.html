@@ -62,7 +62,7 @@
     .list {
       list-style: none;
       padding: 0;
-      margin: 0 0 16px 0;
+      margin: 0;
     }
 
     .list li {
@@ -89,22 +89,18 @@
       margin-left: 8px;
     }
 
-    .status {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    .status.error {
-      color: #b91c1c;
-    }
-
     footer {
       margin-top: 40px;
       padding-top: 18px;
       border-top: 1px solid var(--border);
       font-size: 12px;
       color: var(--muted);
+    }
+
+    .status {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
     }
   </style>
 </head>
@@ -119,13 +115,12 @@
     Each record includes full text, summary, keywords and metadata.
   </p>
 
-  <ul id="article-list" class="list">
-    <!-- Contenu généré dynamiquement -->
-    <li>Loading live EU AI Act dataset…</li>
-  </ul>
+  <div id="status" class="status">Loading articles…</div>
 
-  <p class="status" id="dataset-status">
-    Loading <code>/datasets/ai-act/v1/index.json</code>…
+  <ul id="ai-act-list" class="list"></ul>
+
+  <p>
+    More articles in progress… This page will update automatically as more JSON files are added.
     <span class="badge">v1</span>
   </p>
 
@@ -138,26 +133,18 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  (async () => {
-    const listEl = document.getElementById('article-list');
-    const statusEl = document.getElementById('dataset-status');
+  async function loadArticles() {
+    const statusEl = document.getElementById('status');
+    const listEl = document.getElementById('ai-act-list');
 
     try {
-      const res = await fetch('/datasets/ai-act/v1/index.json', {
-        cache: 'no-store'
-      });
-      if (!res.ok) {
-        throw new Error('HTTP ' + res.status);
-      }
+      const res = await fetch('/datasets/ai-act/v1/index.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error('Failed to fetch index.json');
 
       const data = await res.json();
-      const articles = Array.isArray(data.articles) ? data.articles : [];
+      const articles = Array.isArray(data.articles) ? data.articles.slice() : [];
 
-      if (!articles.length) {
-        throw new Error('No articles found in index.json');
-      }
-
-      // Tri par numéro croissant (number = "01", "02", …)
+      // Tri par numéro d’article (01, 02, 03…)
       articles.sort((a, b) => {
         const na = parseInt(a.number || '0', 10);
         const nb = parseInt(b.number || '0', 10);
@@ -167,29 +154,30 @@
       listEl.innerHTML = '';
 
       for (const art of articles) {
-        const num = (art.number || '').toString().padStart(2, '0');
-        const title = art.title || 'Untitled article';
-        const path = art.path || `/datasets/ai-act/v1/articles/${num}.json`;
-
         const li = document.createElement('li');
         const a = document.createElement('a');
-        a.href = '/' + path.replace(/^\//, '');
+
+        const num = (art.number || '').toString().padStart(2, '0');
+        const title = art.title || '(No title)';
+
+        // On se base sur le champ path de index.json
+        const href = art.path ? '/' + art.path : `/datasets/ai-act/v1/articles/${num}.json`;
+
+        a.href = href;
         a.textContent = `Article ${num} – ${title}`;
+
         li.appendChild(a);
         listEl.appendChild(li);
       }
 
-      statusEl.textContent = `Loaded ${articles.length} articles from live index.json.`;
-      statusEl.classList.remove('error');
+      statusEl.textContent = `${articles.length} article(s) loaded from dataset index.`;
     } catch (err) {
-      console.error('Failed to load EU AI Act index:', err);
-      statusEl.textContent =
-        'Unable to load the live EU AI Act dataset (index.json). Please check that datasets/ai-act/v1/index.json exists and is valid JSON.';
-      statusEl.classList.add('error');
-
-      // Si tu veux, tu peux ici remettre une petite liste statique de secours.
+      console.error(err);
+      statusEl.textContent = 'Error loading articles (check /datasets/ai-act/v1/index.json).';
     }
-  })();
+  }
+
+  loadArticles();
 </script>
 
 </body>
