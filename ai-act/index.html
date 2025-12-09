@@ -10,21 +10,16 @@
   <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#f3f4f6" />
 
-  <!-- Styles (copie alignée sur index) -->
   <style>
     :root {
       --bg: #f3f4f6;
-      --bg-alt: #e5e7eb;
       --card-bg: #ffffff;
-      --card-soft: #f9fafb;
       --text: #0f172a;
       --muted: #6b7280;
       --accent: #6366f1;
       --accent-soft: #eef2ff;
       --accent-strong: #4f46e5;
       --border: #e5e7eb;
-      --ok: #22c55e;
-      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
       --radius-lg: 18px;
       --max-width: 1040px;
       --error: #dc2626;
@@ -61,13 +56,13 @@
       margin-bottom: 24px;
     }
 
-    .list {
+    ul.list {
       list-style: none;
       padding: 0;
       margin: 0;
     }
 
-    .list li {
+    ul.list li {
       margin-bottom: 12px;
     }
 
@@ -91,17 +86,10 @@
       margin-left: 8px;
     }
 
-    .status {
-      margin-top: 16px;
-      font-size: 13px;
-    }
-
-    .status-ok {
-      color: var(--muted);
-    }
-
-    .status-error {
+    .error {
+      margin-top: 8px;
       color: var(--error);
+      font-size: 14px;
     }
 
     footer {
@@ -116,7 +104,6 @@
 
 <body>
 <div class="page">
-
   <h1>EU AI Act — Articles (v1)</h1>
 
   <p>
@@ -124,75 +111,78 @@
     Each record includes full text, summary, keywords and metadata.
   </p>
 
-  <!-- Liste statique 1–10 en fallback SEO -->
-  <ul class="list" id="article-list">
-    <li><a href="/datasets/ai-act/v1/articles/01.json">Article&nbsp;01 – Subject matter</a></li>
-    <li><a href="/datasets/ai-act/v1/articles/02.json">Article&nbsp;02 – Scope</a></li>
-    <li><a href="/datasets/ai-act/v1/articles/03.json">Article&nbsp;03 – Definitions</a></li>
-    <li><a href="/datasets/ai-act/v1/articles/04.json">Article&nbsp;04 – AI literacy</a></li>
-    <li><a href="/datasets/ai-act/v1/articles/05.json">Article&nbsp;05 – Prohibited AI Practices</a></li>
-    <li><a href="/datasets/ai-act/v1/articles/06.json">Article&nbsp;06 – Classification Rules for High-Risk AI Systems</a></li>
-    <li><a href="/datasets/ai-act/v1/articles/07.json">Article&nbsp;07 – Amendments to Annex III</a></li>
-    <li><a href="/datasets/ai-act/v1/articles/08.json">Article&nbsp;08 – Compliance with the Requirements</a></li>
-    <li><a href="/datasets/ai-act/v1/articles/09.json">Article&nbsp;09 – Risk Management System</a></li>
-    <li><a href="/datasets/ai-act/v1/articles/10.json">Article&nbsp;10 – Data and Data Governance</a></li>
-  </ul>
+  <!-- Liste générée dynamiquement -->
+  <ul id="ai-act-list" class="list"></ul>
 
-  <p id="status" class="status status-ok">
+  <p id="fallback-text">
     More articles in progress… This page will update automatically as more JSON files are added.
     <span class="badge">v1</span>
   </p>
 
+  <p id="error-text" class="error" style="display:none;"></p>
+
   <footer>
     © <span id="year"></span> DatasetCenter — Legal datasets for AI. Powered by TimeProofs.
   </footer>
-
 </div>
 
 <script>
-  document.getElementById('year').textContent = new Date().getFullYear();
+  document.getElementById("year").textContent = new Date().getFullYear();
 
-  const listEl = document.getElementById('article-list');
-  const statusEl = document.getElementById('status');
+  async function loadAiActIndex() {
+    const listEl = document.getElementById("ai-act-list");
+    const fallbackEl = document.getElementById("fallback-text");
+    const errorEl = document.getElementById("error-text");
 
-  // URL du dataset live sur GitHub (branche main)
-  const DATA_URL = "https://raw.githubusercontent.com/BACOUL/DatasetCenter/main/datasets/ai-act/v1/index.json";
-
-  async function loadDataset() {
     try {
-      const res = await fetch(DATA_URL, { cache: "no-store" });
+      const res = await fetch("/datasets/ai-act/v1/index.json", { cache: "no-store" });
       if (!res.ok) {
-        throw new Error("HTTP " + res.status);
-      }
-      const data = await res.json();
-      if (!data.articles || !Array.isArray(data.articles)) {
-        throw new Error("Invalid dataset shape");
+        throw new Error("HTTP " + res.status + " when fetching index.json");
       }
 
-      // On remplace la liste statique par la liste complète du dataset
+      const index = await res.json();
+      const articles = Array.isArray(index.articles) ? index.articles : [];
+
+      // rien à afficher → on laisse le texte "More articles in progress…"
+      if (articles.length === 0) {
+        return;
+      }
+
+      // trier par numéro croissant (number est une string "01", "02", etc.)
+      articles.sort((a, b) => {
+        const na = parseInt(a.number || "0", 10);
+        const nb = parseInt(b.number || "0", 10);
+        return na - nb;
+      });
+
       listEl.innerHTML = "";
-      for (const art of data.articles) {
-        if (!art.number || !art.title || !art.path) continue;
+
+      for (const art of articles) {
         const li = document.createElement("li");
         const a = document.createElement("a");
-        a.href = "/" + art.path.replace(/^\//, "");
-        a.textContent = `Article ${art.number.padStart(2, "0")} – ${art.title}`;
+
+        const num = art.number || "–";
+        const title = art.title || "(no title)";
+        const path = art.path || `datasets/ai-act/v1/articles/${num}.json`;
+
+        a.href = "/" + path.replace(/^\/+/, "");
+        a.textContent = `Article ${num} \u2013 ${title}`;
+
         li.appendChild(a);
         listEl.appendChild(li);
       }
 
-      statusEl.textContent = `Loaded ${data.articles.length} articles from the live EU AI Act dataset (v1).`;
-      statusEl.classList.remove("status-error");
-      statusEl.classList.add("status-ok");
+      // on a réussi → on laisse la liste et on garde juste la phrase “More articles in progress…”
+      errorEl.style.display = "none";
     } catch (err) {
-      console.error("Failed to load dataset:", err);
-      statusEl.textContent = "Unable to load the live EU AI Act dataset (index.json). Showing the static list for now.";
-      statusEl.classList.remove("status-ok");
-      statusEl.classList.add("status-error");
+      console.error("Failed to load EU AI Act index.json:", err);
+      errorEl.textContent =
+        "Unable to load the live EU AI Act dataset (index.json). Showing the static text for now.";
+      errorEl.style.display = "block";
     }
   }
 
-  loadDataset();
+  loadAiActIndex();
 </script>
 
 </body>
