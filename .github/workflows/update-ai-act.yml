@@ -2,11 +2,11 @@ name: Update AI Act
 
 on:
   schedule:
-    - cron: "0 2 * * *"     # tous les jours à 02:00 UTC
-  workflow_dispatch: {}     # exécution manuelle
+    - cron: "0 2 * * *"      # chaque jour à 02:00 UTC
+  workflow_dispatch: {}      # déclenchement manuel
 
 permissions:
-  contents: write           # autoriser le push automatique
+  contents: write            # nécessaire pour push automatique
 
 jobs:
   update:
@@ -21,9 +21,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install deps
-        run: npm install
-
+      # On n'a pas besoin de npm install
       - name: Run updater
         run: node scripts/update_ai_act.mjs
 
