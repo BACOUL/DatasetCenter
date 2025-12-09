@@ -17,6 +17,7 @@
   "source_url": "https://artificialintelligenceact.eu/article/7/",
   "version": "ai_act_dataset_v1.0.0",
   "last_updated": "2025-12-08",
-  "full_text_hash": "sha256:b10dbb91fd394809f59b83807754aed2a89c0c191fd0a5db0101645e3be449c2",
+  "full_text_sha256": "b10dbb91fd394809f59b83807754aed2a89c0c191fd0a5db0101645e3be449c2",
+  "dataset_path": "datasets/ai-act/v1/articles/AI_ACT_ART_07.json",
   "github_path": "datasets/ai-act/v1/articles/AI_ACT_ART_07.json"
 }
