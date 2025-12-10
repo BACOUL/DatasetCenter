@@ -115,12 +115,27 @@
     Each record includes full text, summary, keywords and metadata.
   </p>
 
-  <div id="status" class="status">Loading articles…</div>
+  <div class="status">
+    Static list of the first articles. This page will expand as more JSON files are created.
+  </div>
 
-  <ul id="ai-act-list" class="list"></ul>
+  <ul class="list">
+    <li><a href="/datasets/ai-act/v1/articles/01.json">Article&nbsp;01 – Subject matter</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/02.json">Article&nbsp;02 – Scope</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/03.json">Article&nbsp;03 – Definitions</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/04.json">Article&nbsp;04 – AI literacy</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/05.json">Article&nbsp;05 – Prohibited AI Practices</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/06.json">Article&nbsp;06 – Classification Rules for High-Risk AI Systems</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/07.json">Article&nbsp;07 – Amendments to Annex III</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/08.json">Article&nbsp;08 – Compliance with the Requirements</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/09.json">Article&nbsp;09 – Risk Management System</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/10.json">Article&nbsp;10 – Data and Data Governance</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/11.json">Article&nbsp;11 – Technical Documentation</a></li>
+    <li><a href="/datasets/ai-act/v1/articles/12.json">Article&nbsp;12 – Record-Keeping</a></li>
+  </ul>
 
   <p>
-    More articles in progress… This page will update automatically as more JSON files are added.
+    More articles in progress… This page will be updated as more JSON files are added.
     <span class="badge">v1</span>
   </p>
 
@@ -132,52 +147,6 @@
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
-
-  async function loadArticles() {
-    const statusEl = document.getElementById('status');
-    const listEl = document.getElementById('ai-act-list');
-
-    try {
-      const res = await fetch('/datasets/ai-act/v1/index.json', { cache: 'no-store' });
-      if (!res.ok) throw new Error('Failed to fetch index.json');
-
-      const data = await res.json();
-      const articles = Array.isArray(data.articles) ? data.articles.slice() : [];
-
-      // Tri par numéro d’article (01, 02, 03…)
-      articles.sort((a, b) => {
-        const na = parseInt(a.number || '0', 10);
-        const nb = parseInt(b.number || '0', 10);
-        return na - nb;
-      });
-
-      listEl.innerHTML = '';
-
-      for (const art of articles) {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-
-        const num = (art.number || '').toString().padStart(2, '0');
-        const title = art.title || '(No title)';
-
-        // On se base sur le champ path de index.json
-        const href = art.path ? '/' + art.path : `/datasets/ai-act/v1/articles/${num}.json`;
-
-        a.href = href;
-        a.textContent = `Article ${num} – ${title}`;
-
-        li.appendChild(a);
-        listEl.appendChild(li);
-      }
-
-      statusEl.textContent = `${articles.length} article(s) loaded from dataset index.`;
-    } catch (err) {
-      console.error(err);
-      statusEl.textContent = 'Error loading articles (check /datasets/ai-act/v1/index.json).';
-    }
-  }
-
-  loadArticles();
 </script>
 
 </body>
